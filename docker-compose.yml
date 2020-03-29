@@ -12,4 +12,6 @@ services:
     ports:
       - "8601:8601" # used by streamlit
     tty: true
+    environment: 
+      - KAGGLE_CONFIG_DIR=/workspace/script/kaggle_config/
     entrypoint: "bash entry.sh"

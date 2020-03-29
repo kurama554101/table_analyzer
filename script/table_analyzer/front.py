@@ -40,8 +40,7 @@ def main():
     }
     
     # set common sidebar
-    #page       = st.sidebar.radio("move page", ["train", "inference", "kaggle"])
-    page       = st.sidebar.radio("move page", ["train", "inference"])
+    page       = st.sidebar.radio("move page", ["train", "inference", "kaggle"])
     model_type = st.sidebar.selectbox("select model type", ["autogluon", "xgboost"])
     if page == "train":
         render_train_page(model_type, config, params)
@@ -115,6 +114,8 @@ def render_infer_page(model_type, config):
 def render_kaggle_page(model_type, config):
     st.title("Kaggle Page")
     
+    from kaggle_wrapper import KaggleWrapper
+    
     uploaded_file = st.file_uploader("Choose a result csv file", type="csv")
     if uploaded_file is not None:
         # read csv file and display columns
@@ -126,9 +127,22 @@ def render_kaggle_page(model_type, config):
         
         # select exported columns
         export_columns = st.multiselect("select the columns of export", df.columns)
-        if st.button("Export result to Kaggle page"):
-            # TODO : imp
-            pass
+        competition_id = st.text_input("Input competition_id of Kaggle")
+        description    = st.text_input("Input competition description")
+        if len(competition_id) > 0 and len(description) > 0 and st.button("Export result to Kaggle page"):
+            # save csv file
+            df = df.loc[:, export_columns].set_index(export_columns[0])
+            #csv_dir  = os.path.dirname(uploaded_file)
+            csv_path = os.path.join("submit.csv")
+            df.to_csv(csv_path)
+            
+            # submit csv
+            wrapper = KaggleWrapper()
+            wrapper.submit_result(csv_path=csv_path, competition_id=competition_id, description=description)
+            st.success("Success to submit result!")
+            
+            # delete submit file(TODO : 将来的にfile_uploaderからpathが変えるようになったら、submitファイルは残すようにする)
+            os.remove(csv_path)
 
 if __name__ == "__main__":
     main()
