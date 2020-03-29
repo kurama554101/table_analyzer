@@ -6,6 +6,7 @@ WORKDIR /workspace
 RUN pip install numpy pandas scikit-learn
 RUN pip install mxnet autogluon bokeh matplotlib
 RUN pip install streamlit
+RUN pip install kaggle
 
 # add entrypoint script
 ADD ./entry.sh /workspace

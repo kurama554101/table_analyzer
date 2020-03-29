@@ -6,3 +6,6 @@ __pycache__
 
 # ignore output files
 script/table_analyzer/output/*
+
+# ignore kaggle config
+script/table_analyzer/kaggle_config/kaggle.json
