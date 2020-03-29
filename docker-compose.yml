@@ -1,0 +1,15 @@
+version: "2.4"
+
+services:
+  table_analyzer:
+    image: table_analyzer_image
+    build:
+      context   : ./docker
+      dockerfile: ./Dockerfile
+    container_name: "table_analyzer"
+    volumes:
+      - ./script/table_analyzer:/workspace/script
+    ports:
+      - "8601:8601" # used by streamlit
+    tty: true
+    entrypoint: "bash entry.sh"
