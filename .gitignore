@@ -1,2 +1,8 @@
 # ignore vscode files
 .vscode
+
+# ignore pycache
+__pycache__
+
+# ignore output files
+script/table_analyzer/output/*
